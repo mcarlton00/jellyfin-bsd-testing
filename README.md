@@ -13,7 +13,7 @@ Otherwise, a fresh FreeBSD 12.1-RELEASE server to dev on
 
 ### Install required packages
 
-    pkg install ca_root_nss libunwind icu openssl
+    pkg install ca_root_nss libunwind icu libressl
 
 ### Download/install dotnet package
 
@@ -26,8 +26,8 @@ Otherwise, a fresh FreeBSD 12.1-RELEASE server to dev on
 
     mkdir /jellyfin
     cd /jellyfin
-    fetch https://repo.jellyfin.org/releases/server/portable/nightly/jellyfin-nightly_20200220.tar.gz
-    tar -xf jellyfin-nightly_20200220.tar.gz
+    fetch https://repo.jellyfin.org/releases/server/portable/stable/jellyfin_10.5.0.portable.tar.gz
+    tar -xf jellyfin_10.5.0.portable.tar.gz
     cd jellyfin_10.5.0
 
 ### Symlink openssl and crypto libraries to the expected place for dotnet
@@ -37,8 +37,18 @@ Otherwise, a fresh FreeBSD 12.1-RELEASE server to dev on
 
 ### Run Jellyfin
 
-    /dotnet/dotnet jellyfin
+    /dotnet/dotnet -d jellyfin
 
 ## Failure
 
-    ld-elf.so.1: /dotnet/shared/Microsoft.NETCore.App/3.0.0-preview-27218-01/System.Security.Cryptography.Native.OpenSsl.so: Undefined symbol "CRYPTO_num_locks"
+# /dotnet/dotnet -d jellyfin
+
+    Telemetry is: Enabled
+    projectfactory: MSBUILD_EXE_PATH = /dotnet/sdk/3.0.100-preview-010021/MSBuild.dll
+    projectfactory: MSBuild project path =
+    projecttoolscommandresolver: ProjectFactory did not find Project.
+    Microsoft.DotNet.Cli.Utils.CommandUnknownException: No executable found matching command "dotnet-jellyfin". See https://aka.ms/missing-command for more information.
+       at Microsoft.DotNet.CommandFactory.CommandFactoryUsingResolver.Create(ICommandResolverPolicy commandResolverPolicy, String commandName, IEnumerable`1 args, NuGetFramework framework, String configuration, String outputPath, String applicationName)
+       at Microsoft.DotNet.CommandFactory.CommandFactoryUsingResolver.Create(String commandName, IEnumerable`1 args, NuGetFramework framework, String configuration, String outputPath, String applicationName)
+       at Microsoft.DotNet.Cli.Program.ProcessArgs(String[] args, ITelemetry telemetryClient)
+       at Microsoft.DotNet.Cli.Program.Main(String[] args)
